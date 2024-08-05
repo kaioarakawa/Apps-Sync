@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  signalr:
+    build:
+      context: ./SignalRServer
+      dockerfile: Dockerfile
+    ports:
+      - "5252:8080"
+    networks:
+      - app-network
+
+  application2:
+    build:
+      context: ./Application2
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_SIGNALR_URL=http://signalr:8080/chatHub
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
